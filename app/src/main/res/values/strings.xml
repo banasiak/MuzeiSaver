@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Muzei Saver</string>
+    <string name="no_artwork">Could Not Find Artwork</string>
+    <string name="unable_to_save">Unable To Save Artwork</string>
+    <string name="success">Current Muzei Artwork Downloaded</string>
+    <string name="by">by</string>
+
+</resources>
