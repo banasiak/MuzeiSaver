@@ -28,42 +28,45 @@ public class DownloadActivity extends Activity {
         super.onCreate(savedInstanceState);
         Artwork artwork = MuzeiContract.Artwork.getCurrentArtwork(this);
         Bitmap image = null;
-        String title, byline;
+        String title = null;
+        String byline = null;
+        
         if(artwork != null) {
             title = artwork.getTitle();
             byline = artwork.getByline();
             try {
                 image = BitmapFactory.decodeStream(getContentResolver().openInputStream(MuzeiContract.Artwork.CONTENT_URI));
             } catch (FileNotFoundException e) {
-                String msg = getResources().getString(R.string.no_artwork);
-                Log.w(TAG, msg);
-                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-                finish();
-            }
-            
-            if(image != null) {
-                String filename = null;
-                if(title != null) {
-                    filename = title.trim();
-                }
-                if (byline != null) {
-                    if(filename != null) {
-                        filename = filename + " " + getResources().getString(R.string.by) + " " + byline.trim();
-                    } else {
-                        filename = byline.trim();
-                    }
-                }
-                if(filename == null) {
-                    filename = new Date().toString();
-                }
-                
-                filename = filename + ".png";
-                
-                saveBitmapToFile(filename, image);
-                
-                finish();
+                Log.w(TAG, "Unable to decode stream into bitmap");
             }  
+        } else {
+            String msg = getResources().getString(R.string.no_artwork);
+            Log.w(TAG, msg);
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         }
+
+        if(image != null) {
+            String filename = null;
+            if(title != null) {
+                filename = title.trim();
+            }
+            if (byline != null) {
+                if(filename != null) {
+                    filename = filename + " " + getResources().getString(R.string.by) + " " + byline.trim();
+                } else {
+                    filename = byline.trim();
+                }
+            }
+            if(filename == null) {
+                filename = new Date().toString();
+            }
+
+            filename = filename + ".png";
+
+            saveBitmapToFile(filename, image);
+        }
+
+        finish();
     }
     
     private void saveBitmapToFile(String filename, Bitmap image) {
