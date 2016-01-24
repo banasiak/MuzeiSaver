@@ -7,8 +7,8 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
-import android.os.Environment;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -61,6 +61,9 @@ public class DownloadActivity extends Activity {
                 filename = new Date().toString();
             }
 
+            // filter out bad characters
+            filename = filename.replaceAll("\\W+", "_");
+
             filename = filename + ".png";
 
             saveBitmapToFile(filename, image);
@@ -80,6 +83,7 @@ public class DownloadActivity extends Activity {
             String msg = getResources().getString(R.string.unable_to_save);
             Log.e(TAG, msg + ": " + e.getMessage());
             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+            return;
         } finally {
             try {
                 if (out != null) {
