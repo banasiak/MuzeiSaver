@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
@@ -8,8 +10,8 @@ android {
         applicationId "com.banasiak.android.muzeisaver"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 4
+        versionName "2.0.0"
     }
     buildTypes {
         release {
@@ -20,6 +22,11 @@ android {
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.google.android.apps.muzei:muzei-api:2.0'
+}
+repositories {
+    google()
+    jcenter()
 }
