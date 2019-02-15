@@ -5,9 +5,9 @@ import android.graphics.BitmapFactory
 import android.media.MediaScannerConnection
 import android.os.Bundle
 import android.os.Environment
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.apps.muzei.api.Artwork
 import com.google.android.apps.muzei.api.MuzeiContract
 import java.io.File
