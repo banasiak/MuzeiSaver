@@ -108,7 +108,7 @@ class DownloadActivity : AppCompatActivity(), EasyPermissions.PermissionCallback
         image.compress(Bitmap.CompressFormat.PNG, 100, it)
         Log.i(TAG, "Image saved to: $file")
       }
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       val msg = resources.getString(R.string.unable_to_save)
       Log.e(TAG, "$msg : ${e.message}")
       Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
