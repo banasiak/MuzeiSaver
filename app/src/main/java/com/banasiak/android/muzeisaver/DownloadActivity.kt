@@ -2,16 +2,12 @@ package com.banasiak.android.muzeisaver
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.apps.muzei.api.Artwork
 import com.google.android.apps.muzei.api.MuzeiContract
 import timber.log.Timber
-import java.util.Date
 
 class DownloadActivity : AppCompatActivity() {
   companion object {
@@ -29,32 +25,8 @@ class DownloadActivity : AppCompatActivity() {
       return
     }
 
-    val filename = generateFilename(artwork)
-    launchFileChooser(filename)
-  }
+    launchFileChooser(filename = artwork.generateFilename())
 
-  private fun generateFilename(artwork: Artwork): String {
-    val title: String? = artwork.title
-    val byline: String? = artwork.byline
-    val date = Date().toString()
-
-    var filename = title?.trim() ?: ""
-
-    if (byline != null) {
-      filename += if (filename.isEmpty()) {
-        byline.trim()
-      } else {
-        " by ${byline.trim()}"
-      }
-    }
-
-    filename += if (filename.isEmpty()) {
-      "$date.png"
-    } else {
-      " - $date.png"
-    }
-
-    return filename
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -64,25 +36,21 @@ class DownloadActivity : AppCompatActivity() {
     }
 
     if (resultCode != Activity.RESULT_OK) {
-      showErrorAndFinish(R.string.no_permissions)
+      showErrorAndFinish(R.string.unable_to_save)
       return
     }
 
-    Timber.i("data: $data")
-
-    val fileUri = data?.data
-
-    // TODO: use workmanager to do this in the background
-    val bitmap = MuzeiContract.Artwork.getCurrentArtworkBitmap(this)
-
-    if (fileUri == null || bitmap == null) {
+    if (data?.data == null) {
       showErrorAndFinish(R.string.unable_to_save)
-    } else {
-      saveBitmapToFile(fileUri, bitmap)
-      //      MediaScannerConnection.scanFile(this, arrayOf(fileUri.path), null, null)
-      Toast.makeText(this, R.string.success, Toast.LENGTH_SHORT).show()
-      finish()
+      return
     }
+
+    Intent(this, DownloadService::class.java).also {
+      it.data = data.data
+      startService(it)
+    }
+
+    finish()
 
   }
 
@@ -94,23 +62,11 @@ class DownloadActivity : AppCompatActivity() {
       .also { startActivityForResult(it, CREATE_FILE_REQUEST_CODE) }
   }
 
-  private fun saveBitmapToFile(fileUri: Uri, image: Bitmap) {
-    try {
-      contentResolver.openOutputStream(fileUri).use {
-        image.compress(Bitmap.CompressFormat.PNG, 100, it)
-        Timber.i("Image saved to: ${fileUri.path}")
-      }
-    } catch (e: Throwable) {
-      Timber.e(e, "Unable to save bitmap")
-      return
-    }
-  }
 
   private fun showErrorAndFinish(@StringRes message: Int) {
     Timber.e(getString(message))
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     finish()
   }
-
 
 }
