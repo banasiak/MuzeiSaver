@@ -1,17 +1,17 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "com.banasiak.android.muzeisaver"
-        minSdkVersion 17
-        targetSdkVersion 28
-        versionCode 5
-        versionName "2.0.1"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 6
+        versionName "3.0.0"
     }
     buildTypes {
         release {
@@ -19,14 +19,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'com.google.android.apps.muzei:muzei-api:2.0'
-    implementation 'pub.devrel:easypermissions:3.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.apps.muzei:muzei-api:3.2.0'
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 }
+
 repositories {
     google()
     jcenter()

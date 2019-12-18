@@ -4,7 +4,6 @@
   <string name="no_artwork">Could Not Find Muzei Artwork</string>
   <string name="unable_to_save">Unable To Save Muzei Artwork</string>
   <string name="success">Current Muzei Artwork Downloaded</string>
-  <string name="rationale">Muzei Saver needs access to device storage in order to download the current Muzei artwork.</string>
-  <string name="no_permissions">Storage Permission Not Granted</string>
-  <string name="by">by</string>
+  <string name="download_service">Download Service</string>
+  <string name="downloading_artwork">Downloading Muzei Artwork</string>
 </resources>
