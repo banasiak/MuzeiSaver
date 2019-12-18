@@ -1,66 +1,50 @@
 package com.banasiak.android.muzeisaver
 
 import android.app.IntentService
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.apps.muzei.api.MuzeiContract
 import timber.log.Timber
 
-class DownloadService : IntentService("MuzeiSaverDownloadService") {
+class DownloadService : IntentService("DownloadService") {
+
   companion object {
-    private const val NOTIFICATION_ID = 62180
+    const val NOTIFICATION_ID = 62180
   }
 
   override fun onHandleIntent(intent: Intent?) {
-
-    requireNotNull(intent?.data) { "File URI must be provided" }
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      val notificationManager = NotificationManagerCompat.from(this)
-      val notificationChannel = NotificationChannel(NOTIFICATION_ID.toString(), getString(R.string.downloads), NotificationManager.IMPORTANCE_LOW)
-      notificationManager.createNotificationChannels(listOf(notificationChannel))
-    }
-
+    val data = requireNotNull(intent?.data) { "File URI must be provided" }
     val notification = NotificationCompat.Builder(this, NOTIFICATION_ID.toString())
-      .setSmallIcon(R.drawable.ic_launcher_foreground)
+      .setSmallIcon(R.drawable.ic_file_download)
       .setColor(ResourcesCompat.getColor(resources, R.color.ic_launcher_background, null))
-      .setContentText(getString(R.string.downloading_artwork))
+      .setContentTitle(getString(R.string.downloading_artwork))
       .setProgress(0, 0, true)
       .build()
-
     startForeground(NOTIFICATION_ID, notification)
-    downloadArtwork(intent?.data)
-    stopForeground(false)
-
+    downloadArtwork(data)
+    stopForeground(true)
   }
 
-  private fun downloadArtwork(fileUri: Uri?) {
+  private fun downloadArtwork(fileUri: Uri) {
     val bitmap: Bitmap? = contentResolver.openInputStream(MuzeiContract.Artwork.CONTENT_URI).use {
       BitmapFactory.decodeStream(it)
     }
-
-    if (fileUri == null || bitmap == null) {
+    if (bitmap == null) {
       showToast(message = R.string.unable_to_save, isError = true)
       return
     }
-
     when (saveBitmapToFile(fileUri, bitmap)) {
       true -> showToast(message = R.string.success)
       false -> showToast(message = R.string.unable_to_save, isError = true)
     }
-
   }
 
   private fun saveBitmapToFile(fileUri: Uri, image: Bitmap): Boolean {

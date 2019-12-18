@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.apps.muzei.api.Artwork
 import com.google.android.apps.muzei.api.MuzeiContract
 import timber.log.Timber
 
@@ -17,16 +18,12 @@ class DownloadActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
-    val artwork = MuzeiContract.Artwork.getCurrentArtwork(this)
-
+    val artwork: Artwork? = MuzeiContract.Artwork.getCurrentArtwork(this)
     if (artwork == null) {
       showErrorAndFinish(R.string.no_artwork)
       return
     }
-
-    launchFileChooser(filename = artwork.generateFilename())
-
+    launchFileChooser(artwork.generateFilename())
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -34,24 +31,15 @@ class DownloadActivity : AppCompatActivity() {
       super.onActivityResult(requestCode, resultCode, data)
       return
     }
-
     if (resultCode != Activity.RESULT_OK) {
       showErrorAndFinish(R.string.unable_to_save)
       return
     }
-
-    if (data?.data == null) {
-      showErrorAndFinish(R.string.unable_to_save)
-      return
-    }
-
     Intent(this, DownloadService::class.java).also {
-      it.data = data.data
+      it.data = data?.data
       startService(it)
     }
-
     finish()
-
   }
 
   private fun launchFileChooser(filename: String) {
@@ -61,7 +49,6 @@ class DownloadActivity : AppCompatActivity() {
       .putExtra(Intent.EXTRA_TITLE, filename)
       .also { startActivityForResult(it, CREATE_FILE_REQUEST_CODE) }
   }
-
 
   private fun showErrorAndFinish(@StringRes message: Int) {
     Timber.e(getString(message))
