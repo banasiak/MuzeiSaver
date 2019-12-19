@@ -1,4 +1,4 @@
-package com.banasiak.android.muzeisaver
+package com.banasiak.android.muzeisaver.util
 
 import android.annotation.SuppressLint
 import com.google.android.apps.muzei.api.Artwork

@@ -1,4 +1,4 @@
-package com.banasiak.android.muzeisaver
+package com.banasiak.android.muzeisaver.download
 
 import android.app.Activity
 import android.content.Intent
@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import com.banasiak.android.muzeisaver.R
+import com.banasiak.android.muzeisaver.util.generateFilename
 import com.google.android.apps.muzei.api.Artwork
 import com.google.android.apps.muzei.api.MuzeiContract
 import timber.log.Timber

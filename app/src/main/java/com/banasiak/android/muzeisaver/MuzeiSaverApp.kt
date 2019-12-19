@@ -7,9 +7,10 @@ import android.app.NotificationManager
 import android.os.Build
 import android.os.StrictMode
 import androidx.core.app.NotificationManagerCompat
+import com.banasiak.android.muzeisaver.download.DownloadService
 import timber.log.Timber
 
-class DownloadApp : Application() {
+class MuzeiSaverApp : Application() {
 
   private val isAndroidM = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
   private val isAndroidO = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
