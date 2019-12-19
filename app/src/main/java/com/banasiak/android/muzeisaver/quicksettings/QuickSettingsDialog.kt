@@ -24,6 +24,7 @@ class QuickSettingsDialog : AppCompatDialogFragment() {
   fun initialize(context: Context, listener: DialogListener) {
     this._context = context
     this.listener = listener
+    this.isCancelable = false
   }
 
   @SuppressLint("InflateParams")
@@ -34,13 +35,10 @@ class QuickSettingsDialog : AppCompatDialogFragment() {
 
     dialogView = LayoutInflater.from(_context).inflate(R.layout.dialog, null)
 
-    val alertBuilder = AlertDialog.Builder(_context)
-    alertBuilder.setView(dialogView)
-    alertBuilder.setPositiveButton(R.string.show) { _, _ ->
-      listener.onPositiveClick()
-    }
-    alertBuilder.setNegativeButton(R.string.hide) { _, _ ->
-      listener.onNegativeClick()
+    val alertBuilder = AlertDialog.Builder(_context).apply {
+      setView(dialogView)
+      setPositiveButton(R.string.show) { _, _ -> listener.onPositiveClick() }
+      setNegativeButton(R.string.hide) { _, _ -> listener.onNegativeClick() }
     }
 
     return alertBuilder.create()

@@ -2,7 +2,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:width="108dp"
   android:height="108dp"
-  android:tint="#F5CF56"
+  android:tint="@color/secondaryColor"
   android:viewportWidth="55.944057"
   android:viewportHeight="55.944057">
   <group
