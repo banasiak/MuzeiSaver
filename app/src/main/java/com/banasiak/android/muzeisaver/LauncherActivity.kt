@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.banasiak.android.muzeisaver.download.DownloadActivity
 
 class LauncherActivity : AppCompatActivity() {
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     Intent(this, DownloadActivity::class.java).also {

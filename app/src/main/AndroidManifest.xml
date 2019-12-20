@@ -29,7 +29,7 @@
       android:label="@string/app_name" />
 
     <activity
-      android:name=".quicksettings.LongPressActivity"
+      android:name=".quicksettings.ToggleLauncherActivity"
       android:excludeFromRecents="true">
       <intent-filter>
         <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
