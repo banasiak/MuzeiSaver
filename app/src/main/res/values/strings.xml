@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">Muzei Saver</string>
-  <string name="no_artwork">Could Not Find Muzei Artwork</string>
-  <string name="unable_to_save">Unable To Save Muzei Artwork</string>
-  <string name="success">Current Muzei Artwork Downloaded</string>
-  <string name="download_service">Download Service</string>
   <string name="downloading_artwork">Downloading Muzei Artwork</string>
+  <string name="download_service">Download Service</string>
+  <string name="hide">Hide</string>
+  <string name="instructions">Congrats on finding the quick settings tile! From now on tapping this tile will prompt you to save the current Muzei artwork.\n\nWould you like to remove the launcher icon from the app drawer? Long press this tile if you change your mind.\n\nNote: This may not work on all versions of Android and a device restart might be necessary for the change to take effect.</string>
+  <string name="launcher_disabled">Launcher Icon Disabled</string>
+  <string name="launcher_enabled">Launcher Icon Enabled</string>
+  <string name="no_artwork">Could Not Find Muzei Artwork</string>
+  <string name="save_artwork">Save artwork</string>
+  <string name="show">Show</string>
+  <string name="success">Current Muzei Artwork Downloaded</string>
+  <string name="unable_to_save">Unable To Save Muzei Artwork</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.banasiak.android.muzeisaver
+package com.banasiak.android.muzeisaver.download
 
 import android.app.IntentService
 import android.content.Intent
@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.content.res.ResourcesCompat
+import com.banasiak.android.muzeisaver.R
 import com.google.android.apps.muzei.api.MuzeiContract
 import timber.log.Timber
 
