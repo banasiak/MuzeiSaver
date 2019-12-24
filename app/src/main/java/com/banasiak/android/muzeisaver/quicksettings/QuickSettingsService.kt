@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
+import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
 import androidx.core.content.edit
@@ -40,6 +41,11 @@ class QuickSettingsService : TileService() {
       }
     )
     prefs.edit { putBoolean(DIALOG_SHOWN_KEY, true) }
+  }
+
+  override fun onTileAdded() {
+    super.onTileAdded()
+    qsTile.state = Tile.STATE_ACTIVE
   }
 
   override fun onTileRemoved() {
