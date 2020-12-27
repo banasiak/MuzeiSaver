@@ -1,37 +1,35 @@
 package com.banasiak.android.muzeisaver.download
 
-import android.app.IntentService
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Handler
-import android.os.Looper
-import android.widget.Toast
+import android.os.Build
 import androidx.annotation.StringRes
+import androidx.core.app.JobIntentService
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.res.ResourcesCompat
 import com.banasiak.android.muzeisaver.R
 import com.google.android.apps.muzei.api.MuzeiContract
 import timber.log.Timber
 
-class DownloadService : IntentService("DownloadService") {
-
+class DownloadService : JobIntentService() {
   companion object {
-    const val NOTIFICATION_ID = 62180
+    const val DOWNLOAD_COMPLETE_ID = 62181
+    private const val JOB_ID = 1000
+    private const val NOTIFICATION_TIMEOUT = 5 * 1000L //5 seconds
+
+    fun enqueueWork(context: Context, intent: Intent) {
+      enqueueWork(context, DownloadService::class.java, JOB_ID, intent)
+    }
   }
 
-  override fun onHandleIntent(intent: Intent?) {
-    val data = requireNotNull(intent?.data) { "File URI must be provided" }
-    val notification = NotificationCompat.Builder(this, NOTIFICATION_ID.toString())
-      .setSmallIcon(R.drawable.ic_file_download)
-      .setColor(ResourcesCompat.getColor(resources, R.color.ic_launcher_background, null))
-      .setContentTitle(getString(R.string.downloading_artwork))
-      .setProgress(0, 0, true)
-      .build()
-    startForeground(NOTIFICATION_ID, notification)
+  override fun onHandleWork(intent: Intent) {
+    val data = requireNotNull(intent.data) { "Content URI must be provided" }
     downloadArtwork(data)
-    stopForeground(true)
   }
 
   private fun downloadArtwork(fileUri: Uri) {
@@ -39,12 +37,12 @@ class DownloadService : IntentService("DownloadService") {
       BitmapFactory.decodeStream(it)
     }
     if (bitmap == null) {
-      showToast(message = R.string.unable_to_save, isError = true)
+      notify(message = R.string.unable_to_save)
       return
     }
     when (saveBitmapToFile(fileUri, bitmap)) {
-      true -> showToast(message = R.string.success)
-      false -> showToast(message = R.string.unable_to_save, isError = true)
+      true -> notify(message = R.string.success, uri = fileUri)
+      false -> notify(message = R.string.unable_to_save)
     }
   }
 
@@ -61,9 +59,25 @@ class DownloadService : IntentService("DownloadService") {
     }
   }
 
-  private fun showToast(@StringRes message: Int, isError: Boolean = false) {
-    if (isError) Timber.e(getString(message)) else Timber.i(getString(message))
-    Handler(Looper.getMainLooper()).post { Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
+  private fun notify(@StringRes message: Int, uri: Uri? = null) {
+    if (uri == null) Timber.e(getString(message)) else Timber.i(getString(message))
+    val notification = NotificationCompat.Builder(this, DOWNLOAD_COMPLETE_ID.toString())
+      .setSmallIcon(R.drawable.ic_file_download)
+      .setColor(ResourcesCompat.getColor(resources, R.color.ic_launcher_background, null))
+      .setContentTitle(getString(R.string.app_name))
+      .setContentText(getString(message))
+      .setPriority(NotificationCompat.PRIORITY_MAX)
+      .setTimeoutAfter(NOTIFICATION_TIMEOUT)
+      .apply {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && uri != null) {
+          setLargeIcon(ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri)))
+        }
+      }
+      .build()
+
+    NotificationManagerCompat.from(this).apply {
+      notify(DOWNLOAD_COMPLETE_ID, notification)
+    }
   }
 
 }

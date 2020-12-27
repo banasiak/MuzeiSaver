@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import com.banasiak.android.muzeisaver.R
 
 class QuickSettingsDialog : AppCompatDialogFragment() {
-
   interface DialogListener {
     fun onPositiveClick()
     fun onNegativeClick()
@@ -34,7 +33,6 @@ class QuickSettingsDialog : AppCompatDialogFragment() {
     }
 
     dialogView = LayoutInflater.from(_context).inflate(R.layout.dialog, null)
-
     val alertBuilder = AlertDialog.Builder(_context).apply {
       setView(dialogView)
       setPositiveButton(R.string.show) { _, _ -> listener.onPositiveClick() }

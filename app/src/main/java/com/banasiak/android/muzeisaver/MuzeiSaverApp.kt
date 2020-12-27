@@ -1,6 +1,5 @@
 package com.banasiak.android.muzeisaver
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -11,20 +10,15 @@ import com.banasiak.android.muzeisaver.download.DownloadService
 import timber.log.Timber
 
 class MuzeiSaverApp : Application() {
-
-  private val isAndroidM = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-  private val isAndroidO = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-
-  @SuppressLint("NewApi")
   override fun onCreate() {
     super.onCreate()
 
-    if (isAndroidO) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       val notificationManager = NotificationManagerCompat.from(this)
       val notificationChannel = NotificationChannel(
-        DownloadService.NOTIFICATION_ID.toString(),
-        getString(R.string.download_service),
-        NotificationManager.IMPORTANCE_LOW)
+        DownloadService.DOWNLOAD_COMPLETE_ID.toString(),
+        getString(R.string.download_complete),
+        NotificationManager.IMPORTANCE_HIGH)
       notificationManager.createNotificationChannels(listOf(notificationChannel))
     }
 
@@ -32,16 +26,18 @@ class MuzeiSaverApp : Application() {
       Timber.plant(Timber.DebugTree())
       StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
         .detectNetwork()
-        .also {
-          if (isAndroidM) it.detectResourceMismatches()
-          if (isAndroidO) it.detectUnbufferedIo()
+        .apply {
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) detectResourceMismatches()
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) detectUnbufferedIo()
         }
         .penaltyLog()
+        .penaltyDeath()
         .build())
 
       StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
         .detectAll()
         .penaltyLog()
+        .penaltyDeath()
         .build())
     }
   }

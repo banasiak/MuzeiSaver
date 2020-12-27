@@ -37,12 +37,12 @@ class DownloadActivity : AppCompatActivity() {
       showErrorAndFinish(R.string.unable_to_save)
       return
     }
-    Intent(this, DownloadService::class.java)
+    val intent = Intent()
       .also {
         it.flags = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
         it.data = data?.data
-        startService(it)
       }
+    DownloadService.enqueueWork(this, intent)
     finish()
   }
 
