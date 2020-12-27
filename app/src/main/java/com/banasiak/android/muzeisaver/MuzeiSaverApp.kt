@@ -32,20 +32,16 @@ class MuzeiSaverApp : Application() {
       Timber.plant(Timber.DebugTree())
       StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
         .detectNetwork()
-        .detectResourceMismatches()
-        .detectUnbufferedIo()
         .also {
           if (isAndroidM) it.detectResourceMismatches()
           if (isAndroidO) it.detectUnbufferedIo()
         }
         .penaltyLog()
-        .penaltyDeath()
         .build())
 
       StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
         .detectAll()
         .penaltyLog()
-        .penaltyDeath()
         .build())
     }
   }
