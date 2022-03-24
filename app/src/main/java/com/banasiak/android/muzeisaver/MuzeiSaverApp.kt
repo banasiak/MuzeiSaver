@@ -31,13 +31,11 @@ class MuzeiSaverApp : Application() {
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) detectUnbufferedIo()
         }
         .penaltyLog()
-        .penaltyDeath()
         .build())
 
       StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
         .detectAll()
         .penaltyLog()
-        .penaltyDeath()
         .build())
     }
   }
