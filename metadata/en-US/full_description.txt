@@ -1,0 +1,10 @@
+This is a simple app that uses the Muzei 3.0 API to save the currently displayed Muzei wallpaper to your downloads directory.
+
+Step 0: Obviously, your current wallpaper should be Muzei 3.0+.
+Step 1: Tap the icon in the app drawer or use the quick settings tile.
+Step 2: Select where to save the image.
+Step 3: Profit? Nope, because this app is FREE!
+
+Hint: Power users (like me) will associate this app with a gesture, perhaps via Nova Launcher.
+
+Free and open source.  Download the code here: https://github.com/banasiak/MuzeiSaver
